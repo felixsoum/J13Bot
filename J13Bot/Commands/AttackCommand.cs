@@ -32,9 +32,8 @@ namespace J13Bot.Commands
                     var targetPlayer = gameData.IdToPlayer[target.Id];
                     int preHp = targetPlayer.Hp;
                     targetPlayer.Damage(10);
-                    string reply = "```excel";
-                    reply += "\n" + $"{target.Username} loses HP {preHp} => {targetPlayer.Hp}";
-                    reply += "\n```";
+                    attacker.CommitAction();
+                    string reply = Util.FormatEvent($"{target.Username} loses HP {preHp} => {targetPlayer.Hp}");
                     message.Channel.SendMessageAsync(reply);
                 }
                 else

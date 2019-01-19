@@ -42,13 +42,16 @@ namespace J13Bot
 
         private void AddCommands()
         {
-            var commands = new List<BaseCommand>()
+            var commands = new BaseCommand[]
             {
                 new PingCommand(),
                 new PongCommand(),
                 new HelpCommand(),
                 new ExitCommand(),
-                new AttackCommand()
+                new AttackCommand(),
+                new GiftCommand(),
+                new InspectCommand(),
+                new OpenCommand()
             };
 
             foreach (var command in commands)
@@ -68,7 +71,7 @@ namespace J13Bot
             {
                 gameData.IdToPlayer.Add(socketUser.Id, new Player());
             }
-            await testChannel.SendMessageAsync($"Deployment to the cloud successful. {usersCount} users detected.");
+            await testChannel.SendMessageAsync($"All systems operational (v0.5).");
         }
 
         Task Log(LogMessage msg)
