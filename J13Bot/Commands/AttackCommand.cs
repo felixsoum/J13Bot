@@ -19,6 +19,12 @@ namespace J13Bot.Commands
 
             if (target != null)
             {
+                if (target.IsBot)
+                {
+                    message.Channel.SendMessageAsync($"Attacking non-humans is not allowed.");
+                    return;
+                }
+
                 var attacker = gameData.IdToPlayer[message.Author.Id];
                 int secondsThreshold = attacker.GetActThreshold();
                 if (secondsThreshold <= 0)

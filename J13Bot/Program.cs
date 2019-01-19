@@ -68,7 +68,7 @@ namespace J13Bot
             {
                 gameData.IdToPlayer.Add(socketUser.Id, new Player());
             }
-            await testChannel.SendMessageAsync($"All systems operational. {usersCount} users detected.");
+            await testChannel.SendMessageAsync($"Deployment to the cloud successful. {usersCount} users detected.");
         }
 
         Task Log(LogMessage msg)
