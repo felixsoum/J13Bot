@@ -25,12 +25,10 @@ namespace J13Bot
         Random random = new Random();
         SocketGuild guild;
         Dictionary<string, BaseCommand> nameToCommand = new Dictionary<string, BaseCommand>();
-        Task<bool> isGameDone;
         static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         async Task MainAsync()
         {
-            isGameDone = new Task<bool>(() => gameData.IsDone);
             AddCommands();
             client = new DiscordSocketClient();
             client.Log += Log;
@@ -38,7 +36,8 @@ namespace J13Bot
             client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, Secret.Token);
             await client.StartAsync();
-            await isGameDone;
+            await gameData.IsGameDone.Task;
+            await testChannel.SendMessageAsync($"J13 now offline.");
         }
 
         private void AddCommands()
@@ -99,13 +98,13 @@ namespace J13Bot
 
             List<string> stringParams = null;
             BaseCommand invokedCommand = null;
-            foreach (var stringParam in stringParams)
+            foreach (var word in words)
             {
                 if (invokedCommand == null)
                 {
                     foreach (var command in nameToCommand.Keys)
                     {
-                        if (stringParam.ToLowerInvariant() == command)
+                        if (word.ToLowerInvariant() == command)
                         {
                             invokedCommand = nameToCommand[command];
                             stringParams = new List<string>();
@@ -114,7 +113,7 @@ namespace J13Bot
                 }
                 else
                 {
-                    stringParams.Add(stringParam);
+                    stringParams.Add(word);
                 }
             }
 

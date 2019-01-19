@@ -14,6 +14,7 @@ namespace J13Bot.Commands
             if (IsAuthorOwner(message))
             {
                 message.Channel.SendMessageAsync($"Initiating maintenance mode.");
+                gameData.IsGameDone.TrySetResult(true);
             }
         }
     }
