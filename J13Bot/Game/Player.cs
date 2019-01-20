@@ -1,14 +1,44 @@
 ﻿using J13Bot.Game.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace J13Bot
 {
-    class Player
+    [Serializable]
+    class Player : ISerializable
     {
-        public int Hp { get; set; } = 100;
+        public ulong Id { get; set; }
+        public int Hp { get; set; }
+        public const int MaxHp = 100;
         public int LastActionTime { get; set; }
+#pragma warning disable CA2235 // Mark all non-serializable fields
         public List<BaseItem> Items { get; set; } = new List<BaseItem>();
+#pragma warning restore CA2235 // Mark all non-serializable fields
+
+        public Player()
+        {
+            Hp = MaxHp;
+        }
+
+        public Player(SerializationInfo info, StreamingContext context)
+        {
+            Id = (ulong)info.GetValue("id", typeof(ulong));
+            Hp = (int)info.GetValue("hp", typeof(int));
+            LastActionTime = (int)info.GetValue("lastActionTime", typeof(int));
+            string[] itemNames = (string[])info.GetValue("items", typeof(string[]));
+            Items = itemNames.Select(itemName => ItemDatabase.GetItemByName(itemName)).ToList();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("id", Id, typeof(ulong));
+            info.AddValue("hp", Hp, typeof(int));
+            info.AddValue("lastActionTime", LastActionTime, typeof(int));
+            string[] itemNames = Items.Select(item => item.Name).ToArray();
+            info.AddValue("items", itemNames, typeof(string[]));
+        }
 
         public int GetActThreshold()
         {
@@ -31,6 +61,10 @@ namespace J13Bot
         public void Damage(int value)
         {
             Hp -= value;
+            if (Hp < 0)
+            {
+                Hp = 0;
+            }
         }
 
         public void Heal(int value)

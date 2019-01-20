@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Discord.WebSocket;
+using J13Bot.Game.Items;
 
 namespace J13Bot.Commands
 {
@@ -15,11 +16,12 @@ namespace J13Bot.Commands
             {
                 return;
             }
+
             if (stringParams.Count > 0 && stringParams[0] == "everyone")
             {
                 foreach (var player in gameData.IdToPlayer.Values)
                 {
-                    player.Items.Add(gameData.ItemData.GetLootbox());
+                    player.Items.Add(ItemDatabase.GetLootbox());
                 }
                 message.Channel.SendMessageAsync(Reply("Everyone"));
             }
@@ -37,7 +39,7 @@ namespace J13Bot.Commands
                 if (target != null && gameData.IdToPlayer.ContainsKey(target.Id))
                 {
                     Player targetPlayer = gameData.IdToPlayer[target.Id];
-                    targetPlayer?.Items.Add(gameData.ItemData.GetLootbox());
+                    targetPlayer?.Items.Add(ItemDatabase.GetLootbox());
                     message.Channel.SendMessageAsync(Reply(target.Username));
                 }
             }

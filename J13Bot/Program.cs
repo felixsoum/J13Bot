@@ -51,7 +51,9 @@ namespace J13Bot
                 new AttackCommand(),
                 new GiftCommand(),
                 new InspectCommand(),
-                new OpenCommand()
+                new OpenCommand(),
+                new SaveCommand(),
+                new LoadCommand()
             };
 
             foreach (var command in commands)
@@ -69,9 +71,13 @@ namespace J13Bot
             int usersCount = guild.Users.Count;
             foreach (var socketUser in guild.Users)
             {
-                gameData.IdToPlayer.Add(socketUser.Id, new Player());
+                var player = new Player
+                {
+                    Id = socketUser.Id
+                };
+                gameData.IdToPlayer.Add(socketUser.Id, player);
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.5).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.11).");
         }
 
         Task Log(LogMessage msg)

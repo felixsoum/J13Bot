@@ -25,7 +25,7 @@ namespace J13Bot.Commands
                     if (lootbox != null)
                     {
                         player.Items.Remove(lootbox);
-                        BaseItem newItem = gameData.ItemData.GetRandomItem();
+                        BaseItem newItem = ItemDatabase.GetRandomItem();
                         player.Items.Add(newItem);
                         string reply = $"{message.Author.Username} opened a lootbox and obtained :gift: => {newItem.ToString()}";
                         message.Channel.SendMessageAsync(reply);
