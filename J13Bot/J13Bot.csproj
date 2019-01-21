@@ -145,6 +145,7 @@
   <ItemGroup>
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\AttackCommand.cs" />
+    <Compile Include="Commands\AnswerCommand.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="Commands\OpenCommand.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />
     <Compile Include="Commands\PongCommand.cs" />
+    <Compile Include="Commands\QuizCommand.cs" />
     <Compile Include="Commands\SaveCommand.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Items\BaseItem.cs" />

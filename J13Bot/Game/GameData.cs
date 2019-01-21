@@ -7,6 +7,7 @@ namespace J13Bot.Game
     {
         public Dictionary<ulong, Player> IdToPlayer { get; internal set; } = new Dictionary<ulong, Player>();
         public TaskCompletionSource<bool> IsGameDone { get; set; } = new TaskCompletionSource<bool>();
+        public string CurrentQuizAnswer { get; internal set; } = "";
 
         public SaveData CreateSaveData()
         {

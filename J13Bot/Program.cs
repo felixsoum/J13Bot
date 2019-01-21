@@ -53,7 +53,9 @@ namespace J13Bot
                 new InspectCommand(),
                 new OpenCommand(),
                 new SaveCommand(),
-                new LoadCommand()
+                new LoadCommand(),
+                new QuizCommand(),
+                new AnswerCommand()
             };
 
             foreach (var command in commands)
@@ -77,7 +79,7 @@ namespace J13Bot
                 };
                 gameData.IdToPlayer.Add(socketUser.Id, player);
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.11).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.14).");
         }
 
         Task Log(LogMessage msg)
