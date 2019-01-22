@@ -12,6 +12,7 @@ namespace J13Bot.Commands
         public override void OnCommand(List<string> stringParams, SocketUserMessage message)
         {
             SocketUser target = null;
+
             foreach (var mentionedUser in message.MentionedUsers)
             {
                 target = mentionedUser;
@@ -31,10 +32,33 @@ namespace J13Bot.Commands
                 {
                     var targetPlayer = gameData.IdToPlayer[target.Id];
                     int preHp = targetPlayer.Hp;
-                    targetPlayer.Damage(10);
+                    string reply = targetPlayer.Damage(10);
                     attacker.CommitAction();
-                    string reply = Util.FormatEvent($"{target.Username} loses HP {preHp} => {targetPlayer.Hp}");
                     message.Channel.SendMessageAsync(reply);
+                }
+                else
+                {
+                    message.Channel.SendMessageAsync($"{message.Author} has to wait {secondsThreshold} seconds before acting again.");
+                }
+            }
+            else if (gameData.ActiveMonster != null)
+            {
+                var attacker = gameData.IdToPlayer[message.Author.Id];
+                int secondsThreshold = attacker.GetActThreshold();
+                if (secondsThreshold <= 0)
+                {
+                    string reply = gameData.ActiveMonster.Damage(10);
+                    attacker.CommitAction();
+
+                    if (gameData.ActiveMonster.Hp <= 0)
+                    {
+                        attacker.Gold += gameData.ActiveMonster.Gold;
+                        reply += Util.FormatEvent($"{attacker.Username} receives {gameData.ActiveMonster.Gold}G for killing {gameData.ActiveMonster.Name}.");
+                        gameData.ActiveMonster = null;
+                    }
+
+                    message.Channel.SendMessageAsync(reply);
+
                 }
                 else
                 {

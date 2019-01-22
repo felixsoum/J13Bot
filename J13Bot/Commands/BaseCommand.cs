@@ -36,6 +36,18 @@ namespace J13Bot
             return message.Author.Id == Program.OwnerId;
         }
 
+        protected Player GetAuthorPlayer(SocketUserMessage message)
+        {
+            if (gameData.IdToPlayer.ContainsKey(message.Author.Id))
+            {
+                return gameData.IdToPlayer[message.Author.Id];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public abstract void OnCommand(List<string> stringParams, SocketUserMessage message);
     }
 }

@@ -17,6 +17,7 @@ namespace J13Bot
         public const ulong OwnerId = 139024035894788096;
         const string thinkingEmote = "<:thinking_2B:535689034307993631>";
         private const double EmoteChance = 0.05;
+        private const double MonsterChance = 0.05;
 
         GameData gameData = new GameData();
         DiscordSocketClient client;
@@ -55,7 +56,8 @@ namespace J13Bot
                 new SaveCommand(),
                 new LoadCommand(),
                 new QuizCommand(),
-                new AnswerCommand()
+                new AnswerCommand(),
+                new EatCommand(),
             };
 
             foreach (var command in commands)
@@ -75,11 +77,12 @@ namespace J13Bot
             {
                 var player = new Player
                 {
-                    Id = socketUser.Id
+                    Id = socketUser.Id,
+                    Username = socketUser.Username
                 };
                 gameData.IdToPlayer.Add(socketUser.Id, player);
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.14).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.22).");
         }
 
         Task Log(LogMessage msg)
@@ -99,6 +102,52 @@ namespace J13Bot
             if (socketUserMessage == null)
             {
                 return Task.CompletedTask;
+            }
+
+            if (gameData.IdToPlayer.ContainsKey(socketUserMessage.Author.Id))
+            {
+                Player messagingPlayer = gameData.IdToPlayer[socketUserMessage.Author.Id];
+                messagingPlayer.Aggro++;
+
+                var attackTargets = new List<Player>();
+
+                if (random.NextDouble() < MonsterChance)
+                {
+                    int totalAggro = 0;
+                    foreach (var player in gameData.IdToPlayer.Values)
+                    {
+                        if (player.Aggro > 0)
+                        {
+                            attackTargets.Add(player);
+                            totalAggro += player.Aggro;
+                        }
+                    }
+
+                    double pickValue = random.NextDouble();
+                    double incrementalChance = 0;
+                    Player attackTarget = attackTargets[attackTargets.Count - 1];
+                    foreach (var player in attackTargets)
+                    {
+                        incrementalChance += (double)player.Aggro / totalAggro;
+                        if (pickValue < incrementalChance)
+                        {
+                            attackTarget = player;
+                            break;
+                        }
+                    }
+
+                    string reply = "";
+                    if (gameData.ActiveMonster == null)
+                    {
+                        gameData.ActiveMonster = new Monster("Goblin", 30, 5);
+                        reply += $"{gameData.ActiveMonster.Name} has spawned!";
+                    }
+
+                    reply += $"{gameData.ActiveMonster.Name} attacks {attackTarget.Username}.";
+                    reply += attackTarget.Damage(10);
+                    attackTarget.Aggro /= 2;
+                    socketUserMessage.Channel.SendMessageAsync(reply);
+                }
             }
 
             string[] words = socketMessage.Content.Split(' ');
@@ -135,7 +184,7 @@ namespace J13Bot
                 Emote.TryParse(thinkingEmote, out Emote meigud);
                 if (meigud != null)
                 {
-                socketUserMessage.AddReactionAsync(meigud);
+                    socketUserMessage.AddReactionAsync(meigud);
                 }
             }
             return Task.CompletedTask;

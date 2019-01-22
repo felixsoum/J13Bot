@@ -146,6 +146,7 @@
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\AttackCommand.cs" />
     <Compile Include="Commands\AnswerCommand.cs" />
+    <Compile Include="Commands\EatCommand.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="Commands\OpenCommand.cs" />
@@ -158,9 +159,12 @@
     <Compile Include="Commands\SaveCommand.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Items\BaseItem.cs" />
+    <Compile Include="Game\Items\MoneyBagItem.cs" />
+    <Compile Include="Game\Items\RareCandyItem.cs" />
     <Compile Include="Game\Items\ItemDatabase.cs" />
     <Compile Include="Game\Items\LootboxItem.cs" />
     <Compile Include="Game\Items\StubItem.cs" />
+    <Compile Include="Game\Monster.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\SaveData.cs" />
     <Compile Include="Program.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace J13Bot.Game.Items
 {
@@ -12,6 +11,11 @@ namespace J13Bot.Game.Items
         {
             Name = name;
             Code = code;
+        }
+
+        public virtual string Eat(string username, Player eater)
+        {
+            return $"{username} eats the {Name}, but nothing happens...";
         }
 
         public override string ToString()

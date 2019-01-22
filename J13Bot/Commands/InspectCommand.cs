@@ -27,7 +27,7 @@ namespace J13Bot.Commands
                 {
                     Player player = gameData.IdToPlayer[target.Id];
                     string playerItems = player.GetItemsToString();
-                    string reply = $"{target.Username}'s stats: HP {player.Hp}";
+                    string reply = $"{target.Username}'s stats: {player.Hp}HP, Lv.{player.Level}, {player.Gold}G";
                     reply += "\nItems: " + playerItems;
                     message.Channel.SendMessageAsync(reply);
                 }

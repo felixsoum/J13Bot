@@ -39,8 +39,20 @@ namespace J13Bot.Commands
                 if (target != null && gameData.IdToPlayer.ContainsKey(target.Id))
                 {
                     Player targetPlayer = gameData.IdToPlayer[target.Id];
-                    targetPlayer?.Items.Add(ItemDatabase.GetLootbox());
-                    message.Channel.SendMessageAsync(Reply(target.Username));
+                    if (stringParams.Count > 0)
+                    {
+                        BaseItem gift = ItemDatabase.GetItemByName(stringParams[0]);
+                        if (gift != null)
+                        {
+                            targetPlayer?.Items.Add(gift);
+                            message.Channel.SendMessageAsync($"{target.Username} has received a {gift.Name}.");
+                        }
+                    }
+                    else
+                    {
+                        targetPlayer?.Items.Add(ItemDatabase.GetLootbox());
+                        message.Channel.SendMessageAsync(Reply(target.Username));
+                    }
                 }
             }
         }

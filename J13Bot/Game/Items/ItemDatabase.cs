@@ -9,12 +9,12 @@ namespace J13Bot.Game.Items
         static readonly BaseItem[] items = new BaseItem[]
         {
             new LootboxItem(),
+            new RareCandyItem(),
+            new MoneyBagItem(),
             new StubItem("Dagger", ":dagger:"),
             new StubItem("Poop", ":poop:"),
-            new StubItem("Money", ":moneybag:"),
             new StubItem("Boots", ":boot:"),
             new StubItem("HealthPack", ":syringe:"),
-            new StubItem("Candy", ":candy:"),
             new StubItem("Eggplant", ":eggplant:"),
             new StubItem("Shield", ":shield:"),
             new StubItem("Key", ":key:"),

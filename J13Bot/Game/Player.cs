@@ -11,6 +11,13 @@ namespace J13Bot
     {
         public ulong Id { get; set; }
         public int Hp { get; set; }
+
+        public int Level { get; set; } = 1;
+        public int Gold { get; set; } = 10;
+
+        public int Aggro { get; set; }
+
+        public string Username { get; set; }
         public const int MaxHp = 100;
         public int LastActionTime { get; set; }
 #pragma warning disable CA2235 // Mark all non-serializable fields
@@ -26,6 +33,9 @@ namespace J13Bot
         {
             Id = (ulong)info.GetValue("id", typeof(ulong));
             Hp = (int)info.GetValue("hp", typeof(int));
+            Level = (int)info.GetValue("level", typeof(int));
+            Gold = (int)info.GetValue("money", typeof(int));
+            
             LastActionTime = (int)info.GetValue("lastActionTime", typeof(int));
             string[] itemNames = (string[])info.GetValue("items", typeof(string[]));
             Items = itemNames.Select(itemName => ItemDatabase.GetItemByName(itemName)).ToList();
@@ -35,6 +45,9 @@ namespace J13Bot
         {
             info.AddValue("id", Id, typeof(ulong));
             info.AddValue("hp", Hp, typeof(int));
+            info.AddValue("level", Hp, typeof(int));
+            info.AddValue("money", Hp, typeof(int));
+
             info.AddValue("lastActionTime", LastActionTime, typeof(int));
             string[] itemNames = Items.Select(item => item.Name).ToArray();
             info.AddValue("items", itemNames, typeof(string[]));
@@ -58,13 +71,16 @@ namespace J13Bot
             LastActionTime = secondsSinceEpoch;
         }
 
-        public void Damage(int value)
+        public string Damage(int value)
         {
+            int preHp = Hp;
             Hp -= value;
             if (Hp < 0)
             {
                 Hp = 0;
             }
+
+            return Util.FormatEvent($"{Username} loses HP {preHp} => {Hp}");
         }
 
         public void Heal(int value)
@@ -80,6 +96,12 @@ namespace J13Bot
                 itemStrings[i] = Items[i].ToString();
             }
             return String.Join(", ", itemStrings);
+        }
+
+        public BaseItem GetItemFromName(string itemName)
+        {
+            itemName = itemName.ToLowerInvariant();
+            return Items.Find(item => itemName == item.Name.ToLowerInvariant());
         }
     }
 }
