@@ -156,7 +156,9 @@
     <Compile Include="Commands\PingCommand.cs" />
     <Compile Include="Commands\PongCommand.cs" />
     <Compile Include="Commands\QuizCommand.cs" />
+    <Compile Include="Commands\ReactCommand.cs" />
     <Compile Include="Commands\SaveCommand.cs" />
+    <Compile Include="Game\Actor.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Items\BaseItem.cs" />
     <Compile Include="Game\Items\MoneyBagItem.cs" />

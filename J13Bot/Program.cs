@@ -4,6 +4,8 @@ using J13Bot.Commands;
 using J13Bot.Game;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace J13Bot
@@ -17,7 +19,7 @@ namespace J13Bot
         public const ulong OwnerId = 139024035894788096;
         const string thinkingEmote = "<:thinking_2B:535689034307993631>";
         private const double EmoteChance = 0.05;
-        private const double MonsterChance = 0.05;
+        private const double MonsterChance = 0.02;
 
         GameData gameData = new GameData();
         DiscordSocketClient client;
@@ -58,12 +60,62 @@ namespace J13Bot
                 new QuizCommand(),
                 new AnswerCommand(),
                 new EatCommand(),
+                new ReactCommand()
             };
 
             foreach (var command in commands)
             {
                 command.Init(gameData);
                 nameToCommand.Add(command.Name, command);
+            }
+        }
+
+        private async Task AutoLoad()
+        {
+            if (File.Exists(SaveCommand.SaveFile))
+            {
+                FileStream file = null;
+                bool errorLoading = false;
+                try
+                {
+                    var bf = new BinaryFormatter();
+                    file = File.Open(SaveCommand.SaveFile, FileMode.Open);
+                    if (bf.Deserialize(file) is SaveData saveData)
+                    {
+                        gameData.LoadSaveData(saveData);
+                    }
+                    else
+                    {
+                        errorLoading = true;
+                        await testChannel.SendMessageAsync($"Save found but wrong format.");
+                    }
+                    file.Close();
+                }
+                catch (Exception e)
+                {
+                    errorLoading = true;
+                    await testChannel.SendMessageAsync(Util.FormatEvent(e.Message));
+                }
+                finally
+                {
+                    if (file != null)
+                    {
+                        file.Close();
+                    }
+                }
+
+                if (errorLoading)
+                {
+                    File.Delete(SaveCommand.SaveFile);
+                }
+                else
+                {
+                    await testChannel.SendMessageAsync(Util.FormatEvent("Auto load data successful."));
+                }
+            }
+            else
+            {
+                await testChannel.SendMessageAsync("Cannot find save file");
             }
         }
 
@@ -82,7 +134,8 @@ namespace J13Bot
                 };
                 gameData.IdToPlayer.Add(socketUser.Id, player);
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.22).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.28).");
+            await AutoLoad();
         }
 
         Task Log(LogMessage msg)
@@ -140,7 +193,7 @@ namespace J13Bot
                     if (gameData.ActiveMonster == null)
                     {
                         gameData.ActiveMonster = new Monster("Goblin", 30, 5);
-                        reply += $"{gameData.ActiveMonster.Name} has spawned!";
+                        reply += $"{gameData.ActiveMonster.Name} has spawned! ";
                     }
 
                     reply += $"{gameData.ActiveMonster.Name} attacks {attackTarget.Username}.";

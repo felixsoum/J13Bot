@@ -31,26 +31,26 @@ namespace J13Bot
 
         public Player(SerializationInfo info, StreamingContext context)
         {
-            Id = (ulong)info.GetValue("id", typeof(ulong));
-            Hp = (int)info.GetValue("hp", typeof(int));
-            Level = (int)info.GetValue("level", typeof(int));
-            Gold = (int)info.GetValue("money", typeof(int));
+            Id = (ulong)info.GetValue(nameof(Id), typeof(ulong));
+            Hp = (int)info.GetValue(nameof(Hp), typeof(int));
+            Level = (int)info.GetValue(nameof(Level), typeof(int));
+            Gold = (int)info.GetValue(nameof(Gold), typeof(int));
             
-            LastActionTime = (int)info.GetValue("lastActionTime", typeof(int));
-            string[] itemNames = (string[])info.GetValue("items", typeof(string[]));
+            LastActionTime = (int)info.GetValue(nameof(LastActionTime), typeof(int));
+            string[] itemNames = (string[])info.GetValue(nameof(Items), typeof(string[]));
             Items = itemNames.Select(itemName => ItemDatabase.GetItemByName(itemName)).ToList();
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("id", Id, typeof(ulong));
-            info.AddValue("hp", Hp, typeof(int));
-            info.AddValue("level", Hp, typeof(int));
-            info.AddValue("money", Hp, typeof(int));
+            info.AddValue(nameof(Id), Id, typeof(ulong));
+            info.AddValue(nameof(Hp), Hp, typeof(int));
+            info.AddValue(nameof(Level), Level, typeof(int));
+            info.AddValue(nameof(Gold), Gold, typeof(int));
 
-            info.AddValue("lastActionTime", LastActionTime, typeof(int));
+            info.AddValue(nameof(LastActionTime), LastActionTime, typeof(int));
             string[] itemNames = Items.Select(item => item.Name).ToArray();
-            info.AddValue("items", itemNames, typeof(string[]));
+            info.AddValue(nameof(Items), itemNames, typeof(string[]));
         }
 
         public int GetActThreshold()

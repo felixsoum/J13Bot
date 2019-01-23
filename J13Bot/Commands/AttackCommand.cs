@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Discord.WebSocket;
 
 namespace J13Bot.Commands
 {
     class AttackCommand : BaseCommand
     {
+        Random random = new Random();
+
         public AttackCommand() : base("attack")
         {
         }
@@ -47,7 +50,8 @@ namespace J13Bot.Commands
                 int secondsThreshold = attacker.GetActThreshold();
                 if (secondsThreshold <= 0)
                 {
-                    string reply = gameData.ActiveMonster.Damage(10);
+                    int damage = attacker.Level * 5 + random.Next(51);
+                    string reply = gameData.ActiveMonster.Damage(damage);
                     attacker.CommitAction();
 
                     if (gameData.ActiveMonster.Hp <= 0)
