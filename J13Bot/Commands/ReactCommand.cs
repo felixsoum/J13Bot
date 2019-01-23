@@ -10,6 +10,7 @@ namespace J13Bot.Commands
 {
     class ReactCommand : BaseCommand
     {
+        Random random = new Random();
         Regex gfyregex = new Regex("gfyName\":\"(\\w*)\"", RegexOptions.Compiled);
         List<string> gfyNames = new List<string>();
 
@@ -22,7 +23,7 @@ namespace J13Bot.Commands
             if (stringParams.Count > 0)
             {
                 string request = stringParams[0];
-                if (request.Length < 10 && request.All(Char.IsLetter))
+                if (request.Length < 20 && request.All(c => Char.IsLetter(c) || c == '+'))
                 {
                     string jsonString = GetJson(@"https://api.gfycat.com/v1/gfycats/search?search_text=" + request);
 
@@ -45,7 +46,7 @@ namespace J13Bot.Commands
                     {
                         return;
                     }
-                    string randomName = gfyNames[gfyNames.Count - 1];
+                    string randomName = gfyNames[random.Next(gfyNames.Count)];
                     string reply = @"https://gfycat.com/";
                     reply += randomName;
                     message.Channel.SendMessageAsync(reply);
