@@ -147,6 +147,7 @@
     <Compile Include="Commands\AttackCommand.cs" />
     <Compile Include="Commands\AnswerCommand.cs" />
     <Compile Include="Commands\EatCommand.cs" />
+    <Compile Include="Commands\ImgurCommand.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="Commands\OpenCommand.cs" />

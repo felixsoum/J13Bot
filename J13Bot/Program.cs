@@ -28,6 +28,7 @@ namespace J13Bot
         Random random = new Random();
         SocketGuild guild;
         Dictionary<string, BaseCommand> nameToCommand = new Dictionary<string, BaseCommand>();
+
         static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         async Task MainAsync()
@@ -60,7 +61,8 @@ namespace J13Bot
                 new QuizCommand(),
                 new AnswerCommand(),
                 new EatCommand(),
-                new ReactCommand()
+                new ReactCommand(),
+                new ImgurCommand()
             };
 
             foreach (var command in commands)
@@ -134,7 +136,7 @@ namespace J13Bot
                 };
                 gameData.IdToPlayer.Add(socketUser.Id, player);
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.30).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.32).");
             await AutoLoad();
         }
 
