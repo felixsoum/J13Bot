@@ -127,17 +127,24 @@ namespace J13Bot
             testChannel = (SocketTextChannel)client.GetChannel(TestId);
             guild = client.GetGuild(GuildId);
             int usersCount = guild.Users.Count;
+            await AutoLoad();
             foreach (var socketUser in guild.Users)
             {
-                var player = new Player
+                if (gameData.IdToPlayer.ContainsKey(socketUser.Id))
                 {
-                    Id = socketUser.Id,
-                    Username = socketUser.Username
-                };
-                gameData.IdToPlayer.Add(socketUser.Id, player);
+                    gameData.IdToPlayer[socketUser.Id].Username = socketUser.Username;
+                }
+                else
+                {
+                    var player = new Player
+                    {
+                        Id = socketUser.Id,
+                        Username = socketUser.Username
+                    };
+                    gameData.IdToPlayer.Add(socketUser.Id, player);
+                }
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.32).");
-            await AutoLoad();
+            await testChannel.SendMessageAsync($"All systems operational (v0.33).");
         }
 
         Task Log(LogMessage msg)
