@@ -135,9 +135,9 @@ namespace J13Bot.Commands
 
     class ImgurCommand : BaseCommand
     {
-        Random random = new Random();
+        static Random random = new Random();
         Regex imgurRegex = new Regex("\"id\":\"(.......)", RegexOptions.Compiled);
-        List<string> imgurIds = new List<string>();
+        static List<string> imgurIds = new List<string>();
 
         public ImgurCommand() : base("imgur")
         {
@@ -150,45 +150,50 @@ namespace J13Bot.Commands
                 string request = stringParams[0];
                 if (request.Length < 20 && request.All(c => Char.IsLetter(c) || c == '+'))
                 {
-                    string jsonString = GetJson(@"https://api.imgur.com/3/gallery/search/?q_type=jpg&q_type=png&q=" + request);
-                    imgurIds.Clear();
-
-                    var root = JsonConvert.DeserializeObject<Rootobject>(jsonString);
-                    if (root.data.Length > 0)
-                    {
-                        foreach (var data in root.data)
-                        {
-                            if (!data.nsfw)
-                            {
-                                imgurIds.Add(data.id);
-                            }
-                        }
-                    }
-
-                    if (imgurIds.Count == 0)
-                    {
-                        return;
-                    }
-                    string randomId = imgurIds[random.Next(imgurIds.Count)];
-                    string reply = @"https://imgur.com/";
-                    reply += randomId;
-                    message.Channel.SendMessageAsync(reply);
+                    message.Channel.SendMessageAsync(RequestToImgUrl(request));
                 }
             }
         }
 
-        public string GetJson(string url)
+        public static string GetJson(string request)
         {
+            string url = @"https://api.imgur.com/3/gallery/search/viral/?q_type=jpg&q_type=png&q=" + request;
             Uri uri = new Uri(url);
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
-            request.Method = WebRequestMethods.Http.Get;
-            request.Headers.Add("Authorization", "Client-ID " + Secret.ClientId);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(uri);
+            httpWebRequest.Method = WebRequestMethods.Http.Get;
+            httpWebRequest.Headers.Add("Authorization", "Client-ID " + Secret.ClientId);
+            HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string output = reader.ReadToEnd();
             response.Close();
 
             return output;
+        }
+
+        public static string RequestToImgUrl(string request)
+        {
+            string jsonString = GetJson(request);
+
+            imgurIds.Clear();
+
+            var root = JsonConvert.DeserializeObject<Rootobject>(jsonString);
+            if (root.data.Length > 0)
+            {
+                foreach (var data in root.data)
+                {
+                    if (!data.nsfw)
+                    {
+                        imgurIds.Add(data.id);
+                    }
+                }
+            }
+
+            if (imgurIds.Count == 0)
+            {
+                return "";
+            }
+            string randomId = imgurIds[random.Next(imgurIds.Count)];
+            return @"https://imgur.com/" + randomId;
         }
     }
 }

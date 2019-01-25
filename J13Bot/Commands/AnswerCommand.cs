@@ -13,7 +13,8 @@ namespace J13Bot.Commands
         {
             if (gameData.CurrentQuizAnswer.Length > 0 && stringParams.Count > 0)
             {
-                if (stringParams[0].ToLowerInvariant() == gameData.CurrentQuizAnswer.ToLowerInvariant())
+                string combinedAnswer = string.Join(" ", stringParams);
+                if (combinedAnswer.ToLowerInvariant() == gameData.CurrentQuizAnswer.ToLowerInvariant())
                 {
                     message.Channel.SendMessageAsync(Util.FormatEvent($"{message.Author} has answered correctly with {gameData.CurrentQuizAnswer}."));
                     gameData.CurrentQuizAnswer = "";

@@ -144,7 +144,7 @@ namespace J13Bot
                     gameData.IdToPlayer.Add(socketUser.Id, player);
                 }
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.33).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.40).");
         }
 
         Task Log(LogMessage msg)
