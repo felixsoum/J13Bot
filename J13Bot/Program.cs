@@ -62,7 +62,10 @@ namespace J13Bot
                 new AnswerCommand(),
                 new EatCommand(),
                 new ReactCommand(),
-                new ImgurCommand()
+                new ImgurCommand(),
+                new ChallengeCommand(),
+                new DeclineCommand(),
+                new PlayCommand()
             };
 
             foreach (var command in commands)
@@ -144,7 +147,7 @@ namespace J13Bot
                     gameData.IdToPlayer.Add(socketUser.Id, player);
                 }
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.40).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.42).");
         }
 
         Task Log(LogMessage msg)
@@ -166,51 +169,53 @@ namespace J13Bot
                 return Task.CompletedTask;
             }
 
-            if (gameData.IdToPlayer.ContainsKey(socketUserMessage.Author.Id))
-            {
-                Player messagingPlayer = gameData.IdToPlayer[socketUserMessage.Author.Id];
-                messagingPlayer.Aggro++;
+            gameData.Tick();
 
-                var attackTargets = new List<Player>();
+            //if (gameData.IdToPlayer.ContainsKey(socketUserMessage.Author.Id))
+            //{
+            //    Player messagingPlayer = gameData.IdToPlayer[socketUserMessage.Author.Id];
+                //messagingPlayer.Aggro++;
 
-                if (random.NextDouble() < MonsterChance)
-                {
-                    int totalAggro = 0;
-                    foreach (var player in gameData.IdToPlayer.Values)
-                    {
-                        if (player.Aggro > 0)
-                        {
-                            attackTargets.Add(player);
-                            totalAggro += player.Aggro;
-                        }
-                    }
+                //var attackTargets = new List<Player>();
 
-                    double pickValue = random.NextDouble();
-                    double incrementalChance = 0;
-                    Player attackTarget = attackTargets[attackTargets.Count - 1];
-                    foreach (var player in attackTargets)
-                    {
-                        incrementalChance += (double)player.Aggro / totalAggro;
-                        if (pickValue < incrementalChance)
-                        {
-                            attackTarget = player;
-                            break;
-                        }
-                    }
+                //if (random.NextDouble() < MonsterChance)
+                //{
+                //    int totalAggro = 0;
+                //    foreach (var player in gameData.IdToPlayer.Values)
+                //    {
+                //        if (player.Aggro > 0)
+                //        {
+                //            attackTargets.Add(player);
+                //            totalAggro += player.Aggro;
+                //        }
+                //    }
 
-                    string reply = "";
-                    if (gameData.ActiveMonster == null)
-                    {
-                        gameData.ActiveMonster = new Monster("Goblin", 30, 5);
-                        reply += $"{gameData.ActiveMonster.Name} has spawned! ";
-                    }
+                //    double pickValue = random.NextDouble();
+                //    double incrementalChance = 0;
+                //    Player attackTarget = attackTargets[attackTargets.Count - 1];
+                //    foreach (var player in attackTargets)
+                //    {
+                //        incrementalChance += (double)player.Aggro / totalAggro;
+                //        if (pickValue < incrementalChance)
+                //        {
+                //            attackTarget = player;
+                //            break;
+                //        }
+                //    }
 
-                    reply += $"{gameData.ActiveMonster.Name} attacks {attackTarget.Username}.";
-                    reply += attackTarget.Damage(10);
-                    attackTarget.Aggro /= 2;
-                    socketUserMessage.Channel.SendMessageAsync(reply);
-                }
-            }
+                //    string reply = "";
+                //    if (gameData.ActiveMonster == null)
+                //    {
+                //        gameData.ActiveMonster = new Monster("Goblin", 30, 5);
+                //        reply += $"{gameData.ActiveMonster.Name} has spawned! ";
+                //    }
+
+                //    reply += $"{gameData.ActiveMonster.Name} attacks {attackTarget.Username}.";
+                //    reply += attackTarget.Damage(10);
+                //    attackTarget.Aggro /= 2;
+                //    socketUserMessage.Channel.SendMessageAsync(reply);
+                //}
+            //}
 
             string[] words = socketMessage.Content.Split(' ');
             if (words.Length > 4)

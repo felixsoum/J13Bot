@@ -1,4 +1,6 @@
-﻿namespace J13Bot
+﻿using System;
+
+namespace J13Bot
 {
     static class Util
     {
@@ -9,6 +11,12 @@
             result += message;
             result += "\n```";
             return result;
+        }
+
+        public static int GetTime()
+        {
+            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            return (int)t.TotalSeconds;
         }
     }
 }

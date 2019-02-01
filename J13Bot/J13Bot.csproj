@@ -146,6 +146,8 @@
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\AttackCommand.cs" />
     <Compile Include="Commands\AnswerCommand.cs" />
+    <Compile Include="Commands\ChallengeCommand.cs" />
+    <Compile Include="Commands\DeclineCommand.cs" />
     <Compile Include="Commands\EatCommand.cs" />
     <Compile Include="Commands\ImgurCommand.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Commands\GiftCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />
+    <Compile Include="Commands\PlayCommand.cs" />
     <Compile Include="Commands\PongCommand.cs" />
     <Compile Include="Commands\QuizCommand.cs" />
     <Compile Include="Commands\ReactCommand.cs" />
