@@ -147,7 +147,7 @@ namespace J13Bot
                     gameData.IdToPlayer.Add(socketUser.Id, player);
                 }
             }
-            await testChannel.SendMessageAsync($"All systems operational (v0.42).");
+            await testChannel.SendMessageAsync($"All systems operational (v0.43 - Hotfix Scissors).");
         }
 
         Task Log(LogMessage msg)

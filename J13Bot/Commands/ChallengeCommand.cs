@@ -67,7 +67,7 @@ namespace J13Bot.Commands
                 }
             }
             gameData.CreateChallenge(message.Author, opponent, message.Channel);
-            UserExtensions.SendMessageAsync(opponent, $"{message.Author.Username} has challenged you to a game of Rock, Paper, Scissor, Lizard, Spock. Please reply with either *decline* or *play x* where x is your move.");
+            UserExtensions.SendMessageAsync(opponent, $"{message.Author.Username} has challenged you to a game of Rock, Paper, Scissors, Lizard, Spock. Please reply with either *decline* or *play x* where x is your move.");
         }
     }
 }

@@ -78,7 +78,7 @@ namespace J13Bot.Commands
                         }
                         else
                         {
-                            UserExtensions.SendMessageAsync(challenge.ChallengerUser, $"{challenge.OpponentUser.Username} has accepted your challenge of Rock, Paper, Scissor, Lizard, Spock. Please reply with either *decline* or *play x* where x is your move.");
+                            UserExtensions.SendMessageAsync(challenge.ChallengerUser, $"{challenge.OpponentUser.Username} has accepted your challenge of Rock, Paper, Scissors, Lizard, Spock. Please reply with either *decline* or *play x* where x is your move.");
                         }
                     }
                 }
